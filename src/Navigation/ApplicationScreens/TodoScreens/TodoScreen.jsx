@@ -19,7 +19,11 @@ const TodoScreenRootStack = () => {
             <Stack.Screen name="Todos" component={AllTodoScreen} options={{
                 headerShown: false
             }}/>
-            <Stack.Screen name="SpecificTodo" component={SpecificTodo} />
+            <Stack.Screen name="SpecificTodo" component={SpecificTodo} options={({route}) => ({
+                headerStyle: {
+                    backgroundColor: "black"
+                }
+            })} />
         </Stack.Navigator>
     )
 }

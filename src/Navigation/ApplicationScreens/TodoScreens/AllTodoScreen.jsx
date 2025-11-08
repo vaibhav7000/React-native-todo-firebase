@@ -8,10 +8,13 @@ import SingleTodoView from "../../../Components/SingleTodo";
 import { Icon } from "lucide-react-native";
 
 import {bellConciergeDot} from "@lucide/lab"
+import { useNavigation } from "@react-navigation/native";
 
 const AllTodoScreen = () => {
     const [activePill, setActivePill] = useState('All');
     const { todos } = useTodo();
+
+    const navigation = useNavigation();
 
     const data = useMemo(function () {
         return ["All", "Today", "Upcoming", 'Personal', 'Work', 'High', 'Low']
@@ -33,9 +36,9 @@ const AllTodoScreen = () => {
 
         if (hours >= 6 && hours < 12) {
             return "Good Morning 🌅"
-        } else if (hours >= 12 && hours < 15) {
+        } else if (hours >= 12 && hours < 17) {
             return "Good Afternoon 🌞"
-        } else if (hours >= 15 && hours < 20) {
+        } else if (hours >= 17 && hours < 20) {
             return "Good Evening 🌇"
         } else {
             return "Good Night 🌛"
@@ -121,12 +124,13 @@ const AllTodoScreen = () => {
     return (
         <View style={[useSafeAreaStyles(), {
             flex: 1,
-            rowGap: 30
+            rowGap: 30,
+            backgroundColor: "black"
         }]}>
 
             <View style={{
                 flexDirection: "row",
-                justifyContent: "space-between"
+                justifyContent: "space-between",
             }}>
                 <View style={{
                     flexDirection: "row",
@@ -188,7 +192,9 @@ const AllTodoScreen = () => {
                     <PillsView data={data} activePill={activePill} setActivePill={setActivePill} />
                 </View>
 
-                <View style={{}}>
+                <View style={{
+                    flex: 1
+                }}>
 
                     <View style={{
                         flexDirection: "row",
@@ -215,16 +221,17 @@ const AllTodoScreen = () => {
 
                     <FlatList showsVerticalScrollIndicator={false} bounces={false} data={finalTodosRender} keyExtractor={(item) => Date.parse(item.deadline)} extraData={activePill} renderItem={({ item, index, separators }) => {
                         return (
-                            <View style={{
+                            <TouchableOpacity activeOpacity={0.5} onPress={() => {
+                                navigation.navigate("SpecificTodo")
+                            }} style={{
                                 marginBottom: 10
                             }}>
                                 <SingleTodoView item={item} />
-                            </View>
+                            </TouchableOpacity>
                         )
                     }} style={{
                         borderRadius: 20
                     }} contentContainerStyle={{
-
                     }} />
                 </View>
             </View>
