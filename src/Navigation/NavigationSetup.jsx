@@ -19,7 +19,7 @@ const ApplicationRootStack = () => {
         <Tabs.Navigator initialRouteName="AllTodo" screenOptions={({route}) => ({
             headerShown: false,
             sceneStyle: {
-
+                backgroundColor: 'black'
             },
             tabBarStyle: {
             },
