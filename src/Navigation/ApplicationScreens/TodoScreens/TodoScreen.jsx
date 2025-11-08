@@ -10,10 +10,13 @@ const TodoScreenRootStack = () => {
     const Stack = createNativeStackNavigator();
 
     return (
-        <Stack.Navigator initialRouteName="AllTodo" screenOptions={{
-            headerShown: true
+        <Stack.Navigator initialRouteName="Todos" screenOptions={{
+            headerShown: true,
+            contentStyle: {
+                backgroundColor: "black"
+            }
         }}>
-            <Stack.Screen name="AllTodo" component={AllTodoScreen} options={{
+            <Stack.Screen name="Todos" component={AllTodoScreen} options={{
                 headerShown: false
             }}/>
             <Stack.Screen name="SpecificTodo" component={SpecificTodo} />

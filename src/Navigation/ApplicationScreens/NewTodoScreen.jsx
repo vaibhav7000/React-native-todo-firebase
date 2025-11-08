@@ -7,7 +7,9 @@ const NewTodoScreen = () => {
 
     return (
         <View style={[useSafeAreaStyles()]}>
-            <Text>
+            <Text style={[{
+                color: 'white'
+            }]}>
                 Add Todo
             </Text>
         </View>
