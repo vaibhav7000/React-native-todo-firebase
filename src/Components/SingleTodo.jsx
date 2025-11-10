@@ -4,14 +4,14 @@ import { useTodo } from "../Context/TodoContext";
 
 import { Check, Trash } from "lucide-react-native";
 import { remove, update } from "../Reducers/TodoReducer";
+import { months } from "../utils/Constants";
+
 
 const SingleTodoView = props => {
     const { item } = props;
     const { dispatch } = useTodo();
 
-    const months = useMemo(function () {
-        return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    }, []);
+    
 
     return (
         <View style={{

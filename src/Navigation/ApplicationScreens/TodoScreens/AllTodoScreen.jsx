@@ -7,8 +7,9 @@ import { useTodo } from "../../../Context/TodoContext";
 import SingleTodoView from "../../../Components/SingleTodo";
 import { Icon } from "lucide-react-native";
 
-import {bellConciergeDot} from "@lucide/lab"
+import { bellConciergeDot } from "@lucide/lab"
 import { useNavigation } from "@react-navigation/native";
+import { months } from "../../../utils/Constants";
 
 const AllTodoScreen = () => {
     const [activePill, setActivePill] = useState('All');
@@ -33,21 +34,29 @@ const AllTodoScreen = () => {
         })
     }, [todos]);
 
+
     const currentTime = useMemo(function () {
-        const hours = new Date().getHours();
+        const currentDate = new Date();
+        const hours = currentDate.getHours();
+
+        const timeStatus = {
+            todayDate: currentDate,
+        }
 
         if (hours >= 6 && hours < 12) {
-            return "Good Morning 🌅"
+            timeStatus["abvertaion"] = "Good Morning 🌅";
         } else if (hours >= 12 && hours < 17) {
-            return "Good Afternoon 🌞"
+            timeStatus["abvertaion"] = "Good Afternoon 🌞";
         } else if (hours >= 17 && hours < 20) {
-            return "Good Evening 🌇"
+            timeStatus["abvertaion"] = "Good Evening 🌇";
         } else {
-            return "Good Night 🌛"
+            timeStatus["abvertaion"] = "Good Night 🌛";
         }
+
+        return timeStatus;
     }, []);
 
-    const todayTasks = useCallback(function () {
+    const todayTasks = useMemo(function () {
         return getTodaysTasks().length;
     }, [todos]);
 
@@ -157,7 +166,7 @@ const AllTodoScreen = () => {
                             fontSize: 18,
                             fontWeight: "600"
                         }}>
-                            {`${currentTime}`}
+                            {`${currentTime["abvertaion"]}`}
                         </Text>
 
                         <Text style={{
@@ -189,6 +198,27 @@ const AllTodoScreen = () => {
                 rowGap: 30,
                 flex: 1
             }]}>
+
+                <View style={{
+                }}>
+                    <Text style={{
+                        color: 'white',
+                        fontWeight: "600",
+                        fontSize: 40
+                    }}>
+                        {`You've got ${todayTasks} ${todayTasks === 1 ? 'task' : todayTasks === 0 ? todos.length : todayTasks} to crush ${todayTasks >= 1 && 'today'} `}
+
+                        {todayTasks >= 1 && <Text style={{
+                            fontSize: 20,
+                            color: '#858383ff',
+                            fontWeight: "600"
+                        }}>
+                            {`${currentTime["todayDate"].getDate()} ${months[currentTime["todayDate"].getMonth()]} ${currentTime["todayDate"].getFullYear()}`}
+                        </Text>}
+                    </Text>
+
+
+                </View>
 
                 <View>
                     <PillsView data={data} activePill={activePill} setActivePill={setActivePill} />
