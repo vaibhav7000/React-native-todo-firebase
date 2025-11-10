@@ -12,3 +12,10 @@ const AppMain = () => {
 
 
 export default AppMain;
+
+/*
+    Firebase provides various services like storage, authentication, crash-recording,
+    Firebase provides different sdk / packages for different tech to use the above services
+
+
+*/

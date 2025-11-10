@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "233810284813",
+    "project_id": "simpletodo-react-native",
+    "storage_bucket": "simpletodo-react-native.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233810284813:android:40a13c0c8732c3b383e044",
+        "android_client_info": {
+          "package_name": "com.simpletodo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBRY21rqxAReajzpqsTNe_9gRRDAlHfG8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
