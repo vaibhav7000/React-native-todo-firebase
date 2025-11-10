@@ -35,7 +35,7 @@ const todoInitialState = [{
         priority: "High",
     },
     completed: false,
-    deadline: new Date("2025-11-8"),
+    deadline: new Date("2025-11-10"),
 }, {
     title: "Plan weekend date ideas",
     description: "Looking for someone for the date on weekends!",

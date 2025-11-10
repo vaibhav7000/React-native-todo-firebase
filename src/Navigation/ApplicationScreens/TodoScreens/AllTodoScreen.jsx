@@ -14,6 +14,8 @@ const AllTodoScreen = () => {
     const [activePill, setActivePill] = useState('All');
     const { todos } = useTodo();
 
+    const { paddingBottom, paddingLeft, paddingRight, paddingTop } = useSafeAreaStyles();
+
     const navigation = useNavigation();
 
     const data = useMemo(function () {
@@ -119,13 +121,13 @@ const AllTodoScreen = () => {
         }
     }, [activePill, todos]);
 
-    console.log(finalTodosRender)
 
     return (
-        <View style={[useSafeAreaStyles(), {
+        <View style={[, {
             flex: 1,
             rowGap: 30,
-            backgroundColor: "black"
+            backgroundColor: "black",
+            paddingLeft, paddingRight, paddingTop
         }]}>
 
             <View style={{
@@ -224,7 +226,7 @@ const AllTodoScreen = () => {
                             <TouchableOpacity activeOpacity={0.5} onPress={() => {
                                 navigation.navigate("SpecificTodo")
                             }} style={{
-                                marginBottom: 10
+                                marginBottom: index === finalTodosRender.length - 1 ? 65 + paddingBottom : 10
                             }}>
                                 <SingleTodoView item={item} />
                             </TouchableOpacity>

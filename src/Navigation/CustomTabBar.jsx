@@ -33,8 +33,7 @@ const CustomTabBar = ({state, navigation, descriptors, insets}) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 columnGap: 14,
-                backgroundColor: 'rgba(200, 200, 200, 0.5)',
-
+                backgroundColor: 'rgba(200, 200, 200, 0.6)',
 
             }}>
 
@@ -90,3 +89,4 @@ const CustomTabBar = ({state, navigation, descriptors, insets}) => {
 export default CustomTabBar;
 
 // Every time when the tab is changed, the tabBar is again computed based on the the active one
+// The navigation bar is different for each screen, => every time new screen is pushed to the Tab Navigator, each screen gets opened with the Navigation-bar
