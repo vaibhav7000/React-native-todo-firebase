@@ -206,9 +206,9 @@ const AllTodoScreen = () => {
                         fontWeight: "600",
                         fontSize: 40
                     }}>
-                        {`You've got ${todayTasks} ${todayTasks === 1 ? 'task' : todayTasks === 0 ? todos.length : todayTasks} to crush ${todayTasks >= 1 && 'today'} `}
+                        {`You've got ${todayTasks === 1 ? '1 task' : todayTasks === 0 ? todos.length : todayTasks} to crush ${todayTasks >= 1 ? 'today' : ''} `}
 
-                        {todayTasks >= 1 && <Text style={{
+                        {<Text style={{
                             fontSize: 20,
                             color: '#858383ff',
                             fontWeight: "600"

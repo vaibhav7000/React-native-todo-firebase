@@ -33,7 +33,7 @@ const NewTodoScreen = () => {
 
     const getMap = useCallback(function () {
         if (!itemsRef.current) {
-            itemsRef.current = new Map();
+            itemsRef.current = {};
         }
 
         return itemsRef.current;
@@ -73,9 +73,10 @@ const NewTodoScreen = () => {
                                     fontWeight: "500"
                                 }} ref={element => {
                                     const map = getMap();
-                                    map.set(title, element);
+                                    map[title] = element;
 
-                                    return () => map.delete(title);
+                                    return () => delete map[title];
+                                    // we have retuned a callback that will be called so that when the element is removed from the View-hierarchy, its instance from th Map is also removed
                                 }} />
 
                                 {

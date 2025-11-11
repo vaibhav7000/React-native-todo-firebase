@@ -6,8 +6,8 @@ import { View, Text } from "react-native";
 
 
 const CustomTabBar = ({state, navigation, descriptors, insets}) => {
-    console.log(state);
-    console.log(descriptors);
+    // console.log(state);
+    // console.log(descriptors);
 
     const { buildHref } = useLinkBuilder();
 

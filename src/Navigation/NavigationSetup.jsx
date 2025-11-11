@@ -1,4 +1,4 @@
-import {  } from "react";
+import { useEffect, useState } from "react";
 
 import { Icon } from "lucide-react-native"
 import { tabPlus, glassesSun } from "@lucide/lab"
@@ -10,9 +10,12 @@ import NewTodoScreen from "./ApplicationScreens/NewTodoScreen";
 import TodoScreenRootStack from "./ApplicationScreens/TodoScreens/TodoScreen";
 import SearchTodoScreen from "./ApplicationScreens/SearchTodoScreen";
 import useSafeAreaStyles from "../utils/Insets";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import CustomTabBar from "./CustomTabBar";
+import firebaseAuth from "../Services/Firebase/Auth";
 
+import SignUp from "./AuthScreens/SignUp";
+import SignIn from "./AuthScreens/SignIn";
 
 const ApplicationRootStack = () => {
     const Tabs = createBottomTabNavigator();
@@ -66,8 +69,18 @@ const AuthRootStack = () => {
     const Stack = createNativeStackNavigator();
 
     return (
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName="SignUp" screenOptions={props => {
+            const { route } = props;
 
+            return {
+                headerShown: false,
+                contentStyle: {
+                    backgroundColor: "black"
+                }
+            }
+        }}>
+            <Stack.Screen name="SignUp" component={SignUp} />
+            <Stack.Screen name="SignIn" component={SignIn} />
         </Stack.Navigator>
     )
 }
@@ -75,12 +88,25 @@ const AuthRootStack = () => {
 
 const Navigation = () => {
 
-    const isAuth = true;
+    const [isAuth, setIsAuth] = useState(false);
+    console.log(firebaseAuth.currentUser, "Hello 1");
+
+    useEffect(function() {
+        const unsubscribe = firebaseAuth.onAuthStateChanged(user => {
+            if(user) {
+                setIsAuth(true);
+                return;
+            }
+            setIsAuth(false);
+        });
+
+        return unsubscribe;
+    }, []);
 
     return (
-        <NavigationContainer>
+        <>
             {isAuth ? <ApplicationRootStack /> : <AuthRootStack />}
-        </NavigationContainer>
+        </>
     )
 }
 
