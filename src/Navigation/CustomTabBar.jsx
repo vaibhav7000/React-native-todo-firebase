@@ -1,6 +1,6 @@
 import { PlatformPressable } from "@react-navigation/elements";
 import { useLinkBuilder } from "@react-navigation/native";
-import { Calendar, Plus, Search } from "lucide-react-native";
+import { Calendar, Plus, Search, User } from "lucide-react-native";
 import {  } from "react";
 import { View, Text } from "react-native";
 
@@ -27,7 +27,8 @@ const CustomTabBar = ({state, navigation, descriptors, insets}) => {
             
             <View style={{
                 height: "100%",
-                width: "50%",
+                minWidth: "70%",
+                maxWidth: "100%",
                 borderRadius: 30,
                 flexDirection: "row",
                 alignItems: 'center',
@@ -68,6 +69,9 @@ const CustomTabBar = ({state, navigation, descriptors, insets}) => {
                                 break;
                             case "SearchTodo":
                                 element = <Search size={36} color={isFocused ? options.tabBarActiveTintColor : options.tabBarInactiveTintColor} />
+                                break;
+                            case "UserProfile": 
+                            element = <User size={36} color={isFocused ? options.tabBarActiveTintColor : options.tabBarInactiveTintColor} />
                                 break;
                         }
 

@@ -16,6 +16,7 @@ import firebaseAuth from "../Services/Firebase/Auth";
 
 import SignUp from "./AuthScreens/SignUp";
 import SignIn from "./AuthScreens/SignIn";
+import UserProfile from "./ApplicationScreens/UserProfile";
 
 const ApplicationRootStack = () => {
     const Tabs = createBottomTabNavigator();
@@ -33,20 +34,6 @@ const ApplicationRootStack = () => {
             },
             tabBarActiveTintColor:'white',
             tabBarInactiveTintColor:'#353535ff',
-            tabBarIcon: function (props) {
-                const { name } = route;
-                const { focused, color, size } = props;
-                let iconName = glassesSun;
-
-                if(name === 'NewTodo') {
-                    iconName = tabPlus;
-                } else if(name === 'AllTodo') {
-
-                } else if(name === 'SearchTodo') {
-
-                }
-                return <Icon size={size} color={color} iconNode={iconName} />
-            }
         })}>
             <Tabs.Screen name="AllTodo" component={TodoScreenRootStack} options={{
                 // tabBarBadge: 3,
@@ -60,6 +47,8 @@ const ApplicationRootStack = () => {
                 
             }}/>
             <Tabs.Screen name="SearchTodo" component={SearchTodoScreen} />
+
+            <Tabs.Screen name="UserProfile" component={UserProfile} />
         </Tabs.Navigator>
     )
 
@@ -92,7 +81,9 @@ const Navigation = () => {
     console.log(firebaseAuth.currentUser, "Hello 1");
 
     useEffect(function() {
+        // onAuthStateChanged hook is used to listen to the user Authentication Wheather signed-in or signed-out, by default the callback function will be called, when the component mounts and whenever the auth-state changes, it will be called
         const unsubscribe = firebaseAuth.onAuthStateChanged(user => {
+            console.log("hello")
             if(user) {
                 setIsAuth(true);
                 return;

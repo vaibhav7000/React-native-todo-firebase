@@ -1,8 +1,31 @@
 import { firebase } from "@react-native-firebase/auth";
 
 const firebaseAuth = firebase.auth(); // this will pick the default file present in ios and android and provide us an instance that will do the rest for auth from our side
+const createNewUserWithEmailPassword = async(email, password) => {
+    try {
+        const user = await firebaseAuth.createUserWithEmailAndPassword(email, password);
+        return user;
+    } catch(e) {
+        throw e;
+    }
+}
+
+const signOut = async() => {
+    try {
+        const response = await firebaseAuth.signOut();
+        return true;
+    } catch (error) {
+        throw e;
+    }
+}
+
 
 export default firebaseAuth;
+
+export {
+    createNewUserWithEmailPassword,
+    signOut
+}
 
 /*
 
