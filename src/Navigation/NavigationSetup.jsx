@@ -14,8 +14,8 @@ import { Text, View } from "react-native";
 import CustomTabBar from "./CustomTabBar";
 import firebaseAuth from "../Services/Firebase/Auth";
 
-import SignUp from "./AuthScreens/SignUp";
-import SignIn from "./AuthScreens/SignIn";
+import SignUp from "./AuthScreens/SignIn";
+import SignIn from "./AuthScreens/SignUp";
 import UserProfile from "./ApplicationScreens/UserProfile";
 
 const ApplicationRootStack = () => {
@@ -65,7 +65,7 @@ const AuthRootStack = () => {
                 headerShown: false,
                 contentStyle: {
                     backgroundColor: "black"
-                }
+                },
             }
         }}>
             <Stack.Screen name="SignUp" component={SignUp} />

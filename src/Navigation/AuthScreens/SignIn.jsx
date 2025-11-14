@@ -1,21 +1,214 @@
-import {  } from "react";
-import { Text, View } from "react-native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import useSafeAreaStyles from "../../utils/Insets";
+import CustomTextInputView from "../../Components/TextInput";
+import { Icon, Eye, EyeClosed } from "lucide-react-native";
+import { createNewUserWithEmailPassword, getMeaningFullErrorStatus } from "../../Services/Firebase/Auth";
 
-const SignIn = props => {
+const SignUp = props => {
+    const { navigation } = props;
+
+    const itemsRef = useRef(null);
+    const [error, setError] = useState('');
+
+    const [showPassword, setShowPassword] = useState(false);
+
+    const emailValue = useRef('');
+    const passwordValue = useRef('');
+
+    const inputData = useMemo(function () {
+        return [{
+            title: 'Enter your email',
+            keyboardType: 'email-address',
+            placeholder: 'Enter your email...',
+            value: emailValue,
+        }, {
+            title: 'Enter your password',
+            keyboardType: 'default',
+            placeholder: 'Enter your password...',
+            value: passwordValue,
+        }]
+    }, []);
+
+    const signUp = useCallback(async function() {
+        const email = emailValue.current;
+        const password = passwordValue.current;
+
+        console.log(email, password);
+
+        try {
+            await createNewUserWithEmailPassword("vchawla7000@gmail.com", "qwerty098");
+        } catch (error) {
+            setError(getMeaningFullErrorStatus(error));
+        }
+    }, []);
+
+    useEffect(function () {
+        if(!itemsRef.current) return;
+        itemsRef.current[inputData[0].title].focus();
+    }, []);
+
+
+    const getMap = useCallback(function () {
+        if (!itemsRef.current) {
+            itemsRef.current = {};
+        }
+
+        return itemsRef.current;
+    }, []);
 
     return (
         <View style={[useSafeAreaStyles(), {
-            flex: 1,
-            backgroundColor: "red"
+            alignItems: 'center', // alignItems: "center / flex-start / flex-end" in react-native does not allow the children to grow along the cross-axis using flex: 1, you can try with width: "100%" ( when flexDirection: "column" ) / height: "100%" (when flexDirection: "row")
+            flexDirection: "row",
+            flex: 1
         }]}>
-            <Text style={{
-                color: 'white'
+
+            <View style={{
+                flex: 1,
+                rowGap: 14,
+                backgroundColor: "black",
             }}>
-                Signin
-            </Text>
+                <Text style={{
+                    color: 'white',
+                    textAlign: 'center',
+                    fontSize: 30,
+                    fontWeight: "600"
+                }}>
+                    SignIn
+                </Text>
+
+                <View style={{
+                    rowGap: 10
+                }}>
+                    {
+                        inputData.map((data, index) => {
+                            const { keyboardType, placeholder, title, value } = data;
+                            const onChangeText = (newValue) => {
+                                value.current = newValue;
+                            }
+                            return (
+                                <View key={title} style={{
+
+                                }}>
+                                    {
+                                        index === 0 ? <View style={{
+                                            backgroundColor: "#292929ff",
+                                            borderRadius: 20,
+                                            padding: 20,
+                                        }}><CustomTextInputView onChangeText={onChangeText} ref={node => {
+                                            const map = getMap();
+                                            map[title] = node;
+
+                                            return () => {
+                                                // this will be called when the node will be removed from the View => View will re-render and useRef current value persist between the re-renders and 
+                                                delete map[title]
+                                            };
+                                        }} style={{
+                                            color: 'white',
+                                            fontSize: 20,
+                                            fontWeight: "500"
+                                        }} placeholder={placeholder} placeholderTextColor={'#acaaaaff'} /></View> : <View style={{
+                                            backgroundColor: "#292929ff",
+                                            borderRadius: 20,
+                                            padding: 20,
+                                            flexDirection: "row"
+                                        }}><CustomTextInputView onChangeText={onChangeText} secureTextEntry={!showPassword} keyboardType={keyboardType} ref={node => {
+                                            const map = getMap();
+                                            map[title] = node;
+
+                                            return () => delete map[title];
+                                        }} style={{
+                                            flex: 1,
+                                            color: 'white',
+                                            fontSize: 20,
+                                            fontWeight: "500"
+                                        }} placeholder={placeholder} placeholderTextColor={'#acaaaaff'} />
+                                        
+                                        <TouchableOpacity onPress={() => {
+                                            setShowPassword(prev => !prev);
+                                        }} activeOpacity={0.5}>
+                                            {
+                                                showPassword ? <Eye color={"white"} /> : <EyeClosed color={"white"} />
+                                            }
+                                        </TouchableOpacity>
+                                        </View>
+                                    }
+                                </View>
+                            )
+                        })
+                    }
+                </View>
+
+                <View style={{
+                    alignItems: 'center'
+                }}>
+                    {
+                        error && <Text style={{
+                            color: 'red'
+                        }}>
+                            {error}
+                        </Text>
+                    }
+                </View>
+
+                <TouchableOpacity activeOpacity={0.5} onPress={() => {
+                    signUp();
+                }} style={{
+                    alignSelf: 'center',
+                    backgroundColor: "white",
+                    paddingVertical: 6,
+                    paddingHorizontal: 8,
+                    borderRadius: 10
+                }}>
+                    <Text style={{
+                        color: 'black',
+                        fontWeight: "600",
+                        fontSize: 20,
+
+                    }}>
+                        Let's go
+                    </Text>
+                </TouchableOpacity>
+
+                <View style={{
+                    justifyContent: 'center',
+                    flexDirection: "row"
+                }}>
+
+                    <Text style={{
+                            color: 'white',
+                            fontSize: 18,
+                            fontWeight: "600",
+                            textDecorationColor: 'white',
+                            textDecorationLine: 'underline',
+                            textDecorationStyle: 'solid'
+                        }}>
+                            {`New User?`}
+                        </Text>
+
+                        <TouchableOpacity onPress={() => {
+                            navigation.push("SignIn");
+                        }} style={{
+
+                        }}>
+                            <Text style={{
+                                color: 'white',
+                                fontSize: 18,
+                                fontWeight: "600"
+                            }}>
+                                {` SignUp`}
+                            </Text>
+                        </TouchableOpacity>
+                </View>
+            </View>
         </View>
     )
 }
 
-export default SignIn;
+export default SignUp;
+
+/*
+    alignItems: "center / flex-start / flex-end" stops the View (any) to get full avaiable space along the cross-axis using flex: 1, 
+    justifyContent: "center" does not stops the View (any) to get the avaiable space along the main-axis
+*/

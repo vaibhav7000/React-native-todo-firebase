@@ -1,190 +1,150 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import useSafeAreaStyles from "../../utils/Insets";
 import CustomTextInputView from "../../Components/TextInput";
-import { Icon, Eye, EyeClosed } from "lucide-react-native";
-import { createNewUserWithEmailPassword } from "../../Services/Firebase/Auth";
+import { Eye, EyeClosed } from "lucide-react-native";
 
-const SignUp = props => {
-    const { navigation } = props;
+const SignIn = props => {
 
-    const itemsRef = useRef(null);
+    const inputItemsRef = useRef(null);
+
+    const usernameRef = useRef(null);
+    const emailRef = useRef(null);
+    const passwordRef = useRef(null);
+
+    const getMap = useCallback(function() {
+        if(!inputItemsRef.current) {
+            inputItemsRef.current = {};
+        }
+
+        return inputItemsRef.current;
+    }, []);
 
 
-    const [showPassword, setShowPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState(true);
 
-    const inputData = useMemo(function () {
+    const inputFields = useMemo(function() {
         return [{
-            title: 'Enter your email',
-            keyboardType: 'email-address',
-            placeholder: 'Enter your email...'
+            title: "Enter you username",
+            keyboardType: "default",
+            placeholder: "Enter username...",
+            value: usernameRef,
         }, {
-            title: 'Enter your password',
-            keyboardType: 'default',
-            placeholder: 'Enter your password...'
+            title: "Enter your email",
+            keyboardType: "email-address",
+            placeholder: "Enter your email...",
+            value: emailRef,
+        }, {
+            title: "Enter your password",
+            keyboardType: "visible-password",
+            placeholder: "Enter your password...",
+            value: passwordRef
         }]
     }, []);
 
-    const signUp = useCallback(async function() {
-        try {
-            await createNewUserWithEmailPassword("vchawla7000@gmail.com", "qwerty098");
-        } catch (error) {
-            console.log(error);
-        }
-    }, []);
-
-    useEffect(function () {
-        if(!itemsRef.current) return;
-        // itemsRef.current[inputData[0].title].focus();
-    }, []);
-
-
-    const getMap = useCallback(function () {
-        if (!itemsRef.current) {
-            itemsRef.current = {};
-        }
-
-        return itemsRef.current;
-    }, []);
 
     return (
         <View style={[useSafeAreaStyles(), {
-            alignItems: 'center', // alignItems: "center / flex-start / flex-end" in react-native does not allow the children to grow along the cross-axis using flex: 1, you can try with width: "100%" ( when flexDirection: "column" ) / height: "100%" (when flexDirection: "row")
-            flexDirection: "row",
-            flex: 1
+            flex: 1,
+            justifyContent: 'center',
+            rowGap: 14,
         }]}>
 
-            <View style={{
-                flex: 1,
-                rowGap: 14,
-                backgroundColor: "black",
+            <Text style={{
+                color: 'white',
+                textAlign: 'center',
+                fontSize: 30,
+                fontWeight: "600"
             }}>
-                <Text style={{
-                    color: 'white',
-                    textAlign: 'center',
-                    fontSize: 30,
-                    fontWeight: "600"
-                }}>
-                    SignUp
-                </Text>
+                SignUp
+            </Text>
 
-                <View style={{
-                    rowGap: 10
-                }}>
-                    {
-                        inputData.map((data, index) => {
-                            const { keyboardType, placeholder, title } = data;
+            <View style={{
+                rowGap: 10
+            }}>
+                {
+                    inputFields.map(function(input) {
+                        const { title, value, keyboardType, placeholder } = input;
+                        const secureEntry = keyboardType === "visible-password";
+                        console.log(secureEntry, title);
+                        return (
+                            <View style={{
+                                backgroundColor: "#292929ff",
+                                borderRadius: 20,
+                                padding: 20,
+                                flexDirection: "row"
+                            }} key={title}>
+                                <CustomTextInputView secureEntry={secureEntry ? showPassword : false} placeholderTextColor={'#acaaaaff'} style={{
+                                    color: 'white',
+                                    fontSize: 20,
+                                    fontWeight: "500",
+                                    flex: 1
+                                }} placeholder={placeholder} onChangeText={(t) => value.current = t} keyboardType={keyboardType} ref={el => {
+                                    const currentMap = getMap();
+                                    currentMap[title] = el;
 
-                            return (
-                                <View key={title} style={{
+                                    return () => delete currentMap[title]
+                                }} />
 
-                                }}>
-                                    {
-                                        index === 0 ? <View style={{
-                                            backgroundColor: "#292929ff",
-                                            borderRadius: 20,
-                                            padding: 20,
-                                        }}><CustomTextInputView ref={node => {
-                                            const map = getMap();
-                                            map[title] = node;
-
-                                            return () => {
-                                                // this will be called when the node will be removed from the View => View will re-render and useRef current value persist between the re-renders and 
-                                                delete map[title]
-                                            };
-                                        }} style={{
-                                            color: 'white',
-                                            fontSize: 20,
-                                            fontWeight: "500"
-                                        }} placeholder={placeholder} placeholderTextColor={'#acaaaaff'} /></View> : <View style={{
-                                            backgroundColor: "#292929ff",
-                                            borderRadius: 20,
-                                            padding: 20,
-                                            flexDirection: "row"
-                                        }}><CustomTextInputView secureTextEntry={!showPassword} keyboardType={keyboardType} ref={node => {
-                                            const map = getMap();
-                                            map[title] = node;
-
-                                            return () => delete map[title];
-                                        }} style={{
-                                            flex: 1,
-                                            color: 'white',
-                                            fontSize: 20,
-                                            fontWeight: "500"
-                                        }} placeholder={placeholder} placeholderTextColor={'#acaaaaff'} />
-                                        
-                                        <TouchableOpacity onPress={() => {
-                                            setShowPassword(prev => !prev);
-                                        }} activeOpacity={0.5}>
-                                            {
-                                                showPassword ? <Eye color={"white"} /> : <EyeClosed color={"white"} />
-                                            }
+                                {
+                                    secureEntry ? <View>
+                                        <TouchableOpacity activeOpacity={0.5} onPress={() => {
+                                            setShowPassword(prev => !prev)
+                                        }}>
+                                            {showPassword ? <Eye color={'white'} /> : <EyeClosed color={'white'} />}
                                         </TouchableOpacity>
-                                        </View>
-                                    }
-                                </View>
-                            )
-                        })
-                    }
-                </View>
+                                    </View> : null
+                                }
+                            </View>
+                        )
+                    })
+                }
+            </View>
 
-                <TouchableOpacity activeOpacity={0.5} onPress={() => {
-                    signUp();
-                }} style={{
-                    alignSelf: 'center',
+            <TouchableOpacity style={{
+                alignSelf: 'center',
                     backgroundColor: "white",
                     paddingVertical: 6,
                     paddingHorizontal: 8,
                     borderRadius: 10
-                }}>
-                    <Text style={{
-                        color: 'black',
+            }}>
+                <Text style={{
+                    color: 'black',
                         fontWeight: "600",
                         fontSize: 20,
-
-                    }}>
-                        Let's go
-                    </Text>
-                </TouchableOpacity>
-
-                <View style={{
-                    justifyContent: 'center',
-                    flexDirection: "row"
                 }}>
+                    Let's go
+                </Text>
+            </TouchableOpacity>
 
-                    <Text style={{
-                            color: 'white',
-                            fontSize: 16,
+            <View style={{
+                justifyContent: 'center',
+                flexDirection: "row"
+            }}>
+                <Text style={{
+                    color: 'white',
+                            fontSize: 18,
                             fontWeight: "600",
                             textDecorationColor: 'white',
                             textDecorationLine: 'underline',
                             textDecorationStyle: 'solid'
-                        }}>
-                            {`Already have account? `}
-                        </Text>
+                }}>
+                    {`Already have account?`}
+                </Text>
 
-                        <TouchableOpacity onPress={() => {
-                            navigation.replace("SignIn");
-                        }} style={{
-
-                        }}>
-                            <Text style={{
-                                color: 'white',
-                                fontSize: 16,
-                                fontWeight: "600"
-                            }}>
-                                Sign in
-                            </Text>
-                        </TouchableOpacity>
-                </View>
+                <TouchableOpacity activeOpacity={0.5}>
+                    <Text style={{
+                        color: 'white',
+                        fontSize: 18,
+                        fontWeight: "600"
+                    }}>
+                        {` SignIn`}
+                    </Text>
+                </TouchableOpacity>
             </View>
+            
         </View>
     )
 }
 
-export default SignUp;
-
-/*
-    alignItems: "center / flex-start / flex-end" stops the View (any) to get full avaiable space along the cross-axis using flex: 1, 
-    justifyContent: "center" does not stops the View (any) to get the avaiable space along the main-axis
-*/
+export default SignIn;

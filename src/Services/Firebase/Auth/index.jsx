@@ -19,12 +19,26 @@ const signOut = async() => {
     }
 }
 
+function getMeaningFullErrorStatus(e) {
+    const message = e.message;
+    let output = null;
+
+    switch(message) {
+        case "[auth/email-already-in-use] The email address is already in use by another account.":
+            output = "Email already exist in the Database"
+            break;
+    }
+
+    return output;
+}
+
 
 export default firebaseAuth;
 
 export {
     createNewUserWithEmailPassword,
-    signOut
+    signOut,
+    getMeaningFullErrorStatus
 }
 
 /*
